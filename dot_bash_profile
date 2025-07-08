@@ -1,0 +1,9 @@
+#export LANG=C
+export LANG=en_US.UTF-8
+export TERM=rxvt-unicode
+
+ENV=$HOME/.bashrc; export ENV
+
+[[ $PS1 && -f /usr/local/share/bash-completion/bash_completion.sh ]] && \
+     source /usr/local/share/bash-completion/bash_completion.sh
+source .bashrc

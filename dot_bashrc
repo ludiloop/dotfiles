@@ -1,0 +1,39 @@
+#alias x='xinit ~/.xinitrc -- -dpi 75 -nolisten tcp'
+#alias eyesaver='sctd --latitude 45.86 --longitude 15.75 > /dev/null 2>&1'
+
+export EDITOR=vim
+export PROMPT_COMMAND='history -a'
+
+
+HISTCONTROL=ignoredups:ignorespace
+HISTSIZE=655360
+SAVEHIST=1000
+
+# Colours
+txtgrn='\[\e[0;32m\]' # Green
+txtpur='\[\e[0;35m\]' # Purple
+txtwht='\[\e[0;37m\]' # White
+
+# Prompt colours
+atC="${txtpur}"
+nameC="${txtpur}"
+hostC="${txtpur}"
+pathC="${txtgrn}"
+gitC="${txtpur}"
+pointerC="${txtgrn}"
+normalC="${txtwht}"
+
+#PS1='[\u@\h \w]# a'
+# Patent Pending Prompt from Tomnomnom
+export PS1="${nameC}\u${atC}@${hostC}\h:${pathC}\w${gitC}\$(gitPrompt)${pointerC}#${normalC} "
+
+alias myip='curl ipinfo.io/ip'
+alias grep='grep --color=auto'
+alias :q='exit'
+alias less='less -N -S'
+
+source ~/scripts/git-prompt.sh
+# 'Safe' version of __git_ps1 to avoid errors on systems that don't have it
+function gitPrompt {
+  command -v __git_ps1 > /dev/null && __git_ps1 " (%s)"
+}
