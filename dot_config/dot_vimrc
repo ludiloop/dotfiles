@@ -1,0 +1,96 @@
+" Plugins manager https://github.com/junegunn/vim-plug
+
+call plug#begin()
+    Plug 'junegunn/vim-plug'
+    Plug 'romainl/vim-cool'          "Vim-cool disables search highlighting when you are done searching and re-enables it when you search again
+    Plug 'vifm/vifm.vim'             "Vim-plugin that provides integration with Vifm
+    Plug 'fatih/vim-go'
+    Plug 'tpope/vim-fugitive'        "git wrapper
+    Plug 'mg979/vim-visual-multi'    "Multiple cursors plugin for vim
+    Plug 'airblade/vim-gitgutter'    "Vim plugin which shows git diff markers
+
+call plug#end()
+
+" Plugin features
+" vim-cool
+let g:cool_total_matches=1      "show number of matches in the command-line
+
+" Settings
+set title						"change the terminal's title
+set number						"show line numbers
+colorscheme desert
+"syntax on						syntax highlight ON with vim-plug
+set cursorline					"turn on current line highlight
+set background=dark
+"set termguicolors
+set nocompatible				"Vim over Vi
+set autochdir                   "always switch to the current file directory
+set backspace=indent,eol,start	"Allow backspacing over everything in insert mode
+
+" Get the config dir, as config can be either on ~/.vim or ~/.config/vim
+"let s:_confdir = fnamemodify($MYVIMRC, ':h')
+
+set wrapmargin=1				"Number of charcters from the right window border where wrapping starts
+"set textwidth=78
+"set wrap
+"set colorcolumn=+1
+set tabstop=4
+set whichwrap+=<,>,[,]			"Cursor keys wrap to previous/next line
+set wildchar=<TAB>				"Character to start wildcard expansion in the command-line
+"set wildmenu					Put comand-line completion in an enchanced mode
+set t_vb=						"Turn beeping off
+set splitright					"Create new windows right of the current one ':vsplit'
+
+set confirm						"Ask for confirmation rather then refuse certain commands
+set hlsearch					"Turn on highlighting search text by default
+set ignorecase					"Be case insensitive
+set smartcase					"but be case aware when needed
+set expandtab					"I want spaces instead of tabs
+" Show ruler and set format of statusline
+set ruler
+set laststatus=2                "always show statusbar
+set statusline+=%{StatuslineGit()}
+set statusline+=\ <<\ %F			"filename (fullpath)
+set statusline+=\ >>\ %h		    	"indicator for help buffer
+set statusline+=%m				"modifier flag
+set statusline+=%r				"readonly flag
+"set statusline+=|%{winnr()}|%n  window and buffer number
+set statusline+=%=				"switch to the right
+set statusline+=%y              "filetype
+set statusline+=\ %{strlen(&fenc)?&fenc:'none'}   "file encoding
+set statusline+=\ |
+set statusline+=%(%l,%c%V%)		"line, column and virtual column
+set statusline+=\ %3p%%			"percentage of the file
+set statusline+=\ |
+set statusline+=\ %{strftime(\"%H:%M\")}  "current time
+set scrolloff=5					"Minimal nu,ber of screen lines to keep above and below the cursor
+set selection=exclusive			"Define the behaviour of the selection
+set shiftwidth=4				"Number of spaces to use for each step of (auto)indent
+set shortmess=atToOI			"Abbreviate some messages
+set showbreak=>					"String to put at the start of lines that have been wrapped
+set showcmd						"Show (partial) command in status line
+set showmatch					"When a bracket is inserted, briefly jump to the matching onea
+set smarttab					"Do the smart tab/backspace behaviour
+set softtabstop=4
+"backup/writeback/swapfile
+set nobackup
+set directory=/tmp
+"set backupdir=~/.vim/.backup
+
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+"cmap w!! w !sudo tee > /dev/null %
+cmap w!! w !sudo tee % >/dev/null
+
+augroup helpfiles               "vert split ':help' >> look at :help wincmd
+    au!
+    au BufRead,BufEnter */doc/* wincmd L
+augroup END
+
+function! GitBranch()
+  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
+
+function! StatuslineGit()
+  let l:branchname = GitBranch()
+  return strlen(l:branchname) > 0?'  '.l:branchname.' ':''
+endfunction
